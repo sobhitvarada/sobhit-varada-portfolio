@@ -2,9 +2,10 @@
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
     });
 });
 
@@ -23,7 +24,7 @@ const contactForm = document.getElementById('contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         // Get form data
         const formData = new FormData(this);
         const formObject = {};
@@ -31,17 +32,14 @@ if (contactForm) {
             formObject[key] = value;
         });
 
-        // Here you would typically send the form data to a server
-        // For now, we'll just show a success message
+        // Temporary success message
         alert('Thank you for your message! I will get back to you soon.');
         this.reset();
     });
 }
 
 // Add animation to project cards on scroll
-const observerOptions = {
-    threshold: 0.1
-};
+const observerOptions = { threshold: 0.1 };
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -57,4 +55,30 @@ document.querySelectorAll('.project-card').forEach(card => {
     card.style.transform = 'translateY(20px)';
     card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     observer.observe(card);
-}); 
+});
+
+// ===============================
+// 🌙 Dark Mode Toggle
+// ===============================
+const toggleBtn = document.getElementById("darkToggle");
+
+// Add event listener if toggle exists
+if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        
+        if (document.body.classList.contains("dark")) {
+            toggleBtn.textContent = "☀️ Light Mode";
+            localStorage.setItem("theme", "dark");
+        } else {
+            toggleBtn.textContent = "🌙 Dark Mode";
+            localStorage.setItem("theme", "light");
+        }
+    });
+
+    // Load saved theme preference
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        toggleBtn.textContent = "☀️ Light Mode";
+    }
+}
